@@ -16,65 +16,6 @@ class Book:
 
     def insert(self, isbn, title, author, publisher, genre, status):
         new_node = Node(isbn, title, author, publisher, genre, status)
-        self._insert(new_node, self.root)
-
-    def _insert(self, new_node, current_node):
-        """Inserts a new node into the binary search tree."""
-        if current_node is None:
-            self.root = new_node
-            return new_node
-        else:
-            if new_node.isbn < current_node.isbn:
-                current_node.left = self._insert(new_node, current_node.left)
-            else:
-                current_node.right = self._insert(new_node, current_node.right)
-            return current_node
-
-    def search_by_key(self, isbn):
-        """Searches for a node by ISBN in the binary search tree."""
-        return self._search_by_key(isbn, self.root)
-
-    def _search_by_key(self, isbn, current_node):
-        """Searches for a node by ISBN in the binary search tree."""
-        if current_node is None:
-            return None
-        if isbn == current_node.isbn:
-            return current_node
-        if isbn < current_node.isbn:
-            return self._search_by_key(isbn, current_node.left)
-        else:
-            return self._search_by_key(isbn, current_node.right)
-
-    def search_by_title(self, title):
-        """Searches for a node by title in the binary search tree."""
-        current_node = self.root
-        while current_node is not None:
-            if title == current_node.title:
-                return current_node
-            elif title < current_node.title:
-                current_node = current_node.left
-            else:
-                current_node = current_node.right
-        return None
-
-  class Node:
-    def __init__(self, isbn, title, author, publisher, genre, status):
-        self.isbn = isbn
-        self.title = title
-        self.author = author
-        self.publisher = publisher
-        self.genre = genre
-        self.status = status
-        self.left = None
-        self.right = None
-
-
-class Book:
-    def __init__(self):
-        self.root = None
-
-    def insert(self, isbn, title, author, publisher, genre, status):
-        new_node = Node(isbn, title, author, publisher, genre, status)
         if self.root is None:
             self.root = new_node
         else:
