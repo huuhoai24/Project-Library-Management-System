@@ -2,14 +2,14 @@
 # Lưu ý còn cần bổ sung
 Thành phần
 ---------------------------------
-Book:
+### Book:
 - IBSN (book id)
 - Title
 - Author
 - Pusblisher
 - Genre 
 - Status (available / borrowed)
-Functions:
+### Functions:
 - Insert Book
 - Search by key
 - Search by title
