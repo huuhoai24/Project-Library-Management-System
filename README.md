@@ -16,3 +16,4 @@ Thành phần
 - Borrow / Return book
 - Print all book
 - Print avaiable book
+- Delete book
