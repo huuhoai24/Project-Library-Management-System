@@ -9,6 +9,7 @@ class Node:
         self.left = None
         self.right = None
 
+
 class Book:
     def __init__(self):
         self.root = None
@@ -17,157 +18,213 @@ class Book:
         new_node = Node(isbn, title, author, publisher, genre, status)
         self._insert(new_node, self.root)
 
-    def _insert(self, new_node, curr_node):
-        if curr_node is None:
+    def _insert(self, new_node, current_node):
+        """Inserts a new node into the binary search tree."""
+        if current_node is None:
             self.root = new_node
-            return
-        if new_node.isbn < curr_node.isbn:
-            self._insert(new_node, curr_node.left)
+            return new_node
         else:
-            self._insert(new_node, curr_node.right)
+            if new_node.isbn < current_node.isbn:
+                current_node.left = self._insert(new_node, current_node.left)
+            else:
+                current_node.right = self._insert(new_node, current_node.right)
+            return current_node
+
+    def search_by_key(self, isbn):
+        """Searches for a node by ISBN in the binary search tree."""
+        return self._search_by_key(isbn, self.root)
+
+    def _search_by_key(self, isbn, current_node):
+        """Searches for a node by ISBN in the binary search tree."""
+        if current_node is None:
+            return None
+        if isbn == current_node.isbn:
+            return current_node
+        if isbn < current_node.isbn:
+            return self._search_by_key(isbn, current_node.left)
+        else:
+            return self._search_by_key(isbn, current_node.right)
+
+    def search_by_title(self, title):
+        """Searches for a node by title in the binary search tree."""
+        current_node = self.root
+        while current_node is not None:
+            if title == current_node.title:
+                return current_node
+            elif title < current_node.title:
+                current_node = current_node.left
+            else:
+                current_node = current_node.right
+        return None
+
+  class Node:
+    def __init__(self, isbn, title, author, publisher, genre, status):
+        self.isbn = isbn
+        self.title = title
+        self.author = author
+        self.publisher = publisher
+        self.genre = genre
+        self.status = status
+        self.left = None
+        self.right = None
+
+
+class Book:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, isbn, title, author, publisher, genre, status):
+        new_node = Node(isbn, title, author, publisher, genre, status)
+        if self.root is None:
+            self.root = new_node
+        else:
+            self._insert(new_node, self.root)
+
+    def _insert(self, new_node, current_node):
+        if current_node is None:
+            return new_node
+        else:
+            if new_node.isbn < current_node.isbn:
+                current_node.left = self._insert(new_node, current_node.left)
+            else:
+                current_node.right = self._insert(new_node, current_node.right)
+        return current_node
+
 
     def search_by_key(self, isbn):
         return self._search_by_key(isbn, self.root)
 
-    def _search_by_key(self, isbn, curr_node):
-        if curr_node is None:
+    def _search_by_key(self, isbn, current_node):
+        if current_node is None:
             return None
-        if isbn == curr_node.isbn:
-            return curr_node
-        if isbn < curr_node.isbn:
-            return self._search_by_key(isbn, curr_node.left)
+        if isbn == current_node.isbn:
+            return current_node
+        elif isbn < current_node.isbn:
+            return self._search_by_key(isbn, current_node.left)
         else:
-            return self._search_by_key(isbn, curr_node.right)
+            return self._search_by_key(isbn, current_node.right)
 
     def search_by_title(self, title):
         return self._search_by_title(title, self.root)
 
-    def _search_by_title(self, title, curr_node):
-        if curr_node is None:
+    def _search_by_title(self, title, current_node):
+        if current_node is None:
             return None
-        if title == curr_node.title:
-            return curr_node
-        if title < curr_node.title:
-            return self._search_by_title(title, curr_node.left)
+        if title == current_node.title:
+            return current_node
+        elif title < current_node.title:
+            return self._search_by_title(title, current_node.left)
         else:
-            return self._search_by_title(title, curr_node.right)
-
-    def inorder_traversal(self):
-        self._inorder_traversal(self.root)
-
-    def _inorder_traversal(self, curr_node):
-        if curr_node is not None:
-            self._inorder_traversal(curr_node.left)
-            print(curr_node.isbn, curr_node.title, curr_node.author, curr_node.publisher, curr_node.genre, curr_node.status)
-            self._inorder_traversal(curr_node.right)
+            return self._search_by_title(title, current_node.right)
 
     def borrow_book(self, isbn):
+        """Marks a book as borrowed by updating its status."""
         node = self.search_by_key(isbn)
         if node is None:
-            print("Sách không tồn tại")
+            print("Book does not exist")
             return
-        if node.status == "đã mượn":
-            print("Sách đã được mượn")
+        if node.status == "borrowed":
+            print("Book has already been borrowed")
             return
-        node.status = "đã mượn"
-        print("Mượn sách thành công")
+        node.status = "borrowed"  # Cập nhật trạng thái của sách
+        print("Book borrowed successfully")
 
     def return_book(self, isbn):
+        """Marks a book as available by updating its status."""
         node = self.search_by_key(isbn)
         if node is None:
-            print("Sách không tồn tại")
+            print("Book does not exist")
             return
-        if node.status == "sẵn có":
-            print("Sách chưa được mượn")
+        if node.status == "available":
+            print("Book has not been borrowed")
             return
-        node.status = "sẵn có"
-        print("Trả sách thành công")
+        node.status = "available"  # Cập nhật trạng thái của sách
+        print("Book returned successfully")
 
-    def list_all_books(self):
+    def print_all_books(self):
+        """Prints all books in the library."""
         self._inorder_traversal(self.root)
 
-    def list_available_books(self):
-        self._inorder_traversal(self.root, True)
+    def _inorder_traversal(self, current_node, available_only=False):
+        """Performs an inorder traversal, printing only available books if specified."""
+        if current_node:
+            self._inorder_traversal(current_node.left, available_only)
+            if not available_only or current_node.status == "available":
+                print(current_node.isbn, current_node.title, current_node.author,
+                      current_node.publisher, current_node.genre, current_node.status)
+            self._inorder_traversal(current_node.right, available_only)
 
-    def _inorder_traversal(self, curr_node, only_available=False):
-        if curr_node is not None:
-            self._inorder_traversal(curr_node.left, only_available)
-            if not only_available or curr_node.status == "sẵn có":
-                print(curr_node.isbn, curr_node.title, curr_node.author, curr_node.publisher, curr_node.genre, curr_node.status)
-            self._inorder_traversal(curr_node.right, only_available)
+    def print_available_books(self):
+        """Prints only books that are available for borrowing."""
+        print("Available books:")
+        self._inorder_traversal(self.root, available_only=True)
+
+
 def main():
     book_system = Book()
 
     while True:
-        print("\n--- Thư viện sách ---")
-        print("1. Thêm sách")
-        print("2. Tìm kiếm sách theo mã ISBN")
-        print("3. Tìm kiếm sách theo tiêu đề")
-        print("4. Mượn sách")
-        print("5. Trả sách")
-        print("6. Liệt kê tất cả sách")
-        print("7. Liệt kê sách đang có sẵn")
-        print("8. Thoát")
-
-        choice = input("Nhập lựa chọn của bạn (1-8): ")
+        print("\n--- Library Management System ---")
+        print("1. Add Book")
+        print("2. Search by ISBN")
+        print("3. Search by Title")
+        print("4. Borrow a Book")
+        print("5. Return a Book")
+        print("6. Print All Books")
+        print("7. Print Available Books")
+        print("8. Exit")
+        choice = input("Enter your choice: ")
 
         if choice == '1':
-            isbn = input("Nhập mã ISBN: ")
-            title = input("Nhập tiêu đề: ")
-            author = input("Nhập tác giả: ")
-            publisher = input("Nhập nhà xuất bản: ")
-            genre = input("Nhập thể loại: ")
-            status = input("Nhập trạng thái (sẵn có/đã mượn): ")
+            isbn = input("Enter ISBN: ")
+            title = input("Enter Title: ")
+            author = input("Enter Author: ")
+            publisher = input("Enter Publisher: ")
+            genre = input("Enter Genre: ")
+            status = input("Enter Status (available/borrowed): ")
             book_system.insert(isbn, title, author, publisher, genre, status)
-            print("Thêm sách thành công")
+            print("Book added successfully.")
 
         elif choice == '2':
-            isbn = input("Nhập mã ISBN: ")
-            search_result = book_system.search_by_key(isbn)
-            if search_result:
-                print("Thông tin sách:")
-                print("Mã ISBN:", search_result.isbn)
-                print("Tiêu đề:", search_result.title)
-                print("Tác giả:", search_result.author)
-                print("Nhà xuất bản:", search_result.publisher)
-                print("Thể loại:", search_result.genre)
-                print("Trạng thái:", search_result.status)
+            isbn = input("Enter ISBN to search: ")
+            node = book_system.search_by_key(isbn)
+            if node:
+                print(f"Book Found:\nISBN: {node.isbn}\nTitle: {node.title}\nAuthor: {node.author}\nPublisher: {node.publisher}\nGenre: {node.genre}\nStatus: {node.status}")
             else:
-                print("Sách không tìm thấy")
+                print("Book not found.")
 
         elif choice == '3':
-            title = input("Nhập tiêu đề: ")
-            search_result = book_system.search_by_title(title)
-            if search_result:
-                print("Thông tin sách:")
-                print("Mã ISBN:", search_result.isbn)
-                print("Tiêu đề:", search_result.title)
-                print("Tác giả:", search_result.author)
-                print("Nhà xuất bản:", search_result.publisher)
-                print("Thể loại:", search_result.genre)
-                print("Trạng thái:", search_result.status)
+            title = input("Enter Title to search: ")
+            node = book_system.search_by_title(title)
+            if node:
+                print(f"Book Found:\nISBN: {node.isbn}\nTitle: {node.title}\nAuthor: {node.author}\nPublisher: {node.publisher}\nGenre: {node.genre}\nStatus: {node.status}")
             else:
-                print("Sách không tìm thấy")
+                print("Book not found.")
 
         elif choice == '4':
-            isbn = input("Nhập mã ISBN: ")
+            isbn = input("Enter ISBN of the book to borrow: ")
             book_system.borrow_book(isbn)
 
         elif choice == '5':
-            isbn = input("Nhập mã ISBN: ")
+            isbn = input("Enter ISBN of the book to return: ")
             book_system.return_book(isbn)
 
         elif choice == '6':
-            book_system.list_all_books()
+            print("Printing all books in the library:")
+            book_system.print_all_books()
 
         elif choice == '7':
-            book_system.list_available_books()
+            print("Printing all available books in the library:")
+            book_system.print_available_books()
 
         elif choice == '8':
+            print("Exiting the system.")
             break
 
         else:
-            print("Lựa chọn không hợp lệ. Vui lòng nhập lại.")
+            print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main()
+
+
