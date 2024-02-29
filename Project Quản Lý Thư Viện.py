@@ -20,14 +20,14 @@ class Book:
     
     def add_default_books(self):
         default_books = [
-            ("978-0-316-19699-8", "Sapiens: Lược sử loài người", "Yuval Noah Harari", "HarperCollins", "Khoa học phổ thông, Lịch sử", "available"),
-            ("978-1-4391-7103-7", "Nhà giả kim", "Paulo Coelho", "HarperCollins", "Tiểu thuyết, Giả tưởng", "available"),
-            ("978-0-143-11876-2", "Kiêu hãnh và định kiến", "Jane Austen", "Penguin Books", "Tiểu thuyết, Lãng mạn", "available"),
-            ("978-0-393-30788-1", "Bố già", "Mario Puzo", "G. P. Putnam's Sons", "Tiểu thuyết, Tội phạm", "borrowed"),
-            ("978-0-7432-7318-5", "Chúa tể của những chiếc nhẫn", "J. R. R. Tolkien", "Houghton Mifflin Harcourt", "Tiểu thuyết, Giả tưởng", "available"),
-            ("978-0-316-01584-6", "Harry Potter và Hòn đá Phù thủy", "J. K. Rowling", "Bloomsbury Publishing", "Tiểu thuyết, Giả tưởng", "available"),
-            ("978-0-399-55992-4", "Hoàng tử bé", "Antoine de Saint-Exupéry", "Gallimard", "Tiểu thuyết, Giả tưởng", "available"),
-            ("978-1-4000-7860-4", "1984", "George Orwell", "Penguin Books", "Tiểu thuyết, Chính trị", "borrowed")
+            ("8", "Sapiens: Lược sử loài người", "Yuval Noah Harari", "HarperCollins", "Khoa học phổ thông, Lịch sử", "available"),
+            ("7", "Nhà giả kim", "Paulo Coelho", "HarperCollins", "Tiểu thuyết, Giả tưởng", "available"),
+            ("2", "Kiêu hãnh và định kiến", "Jane Austen", "Penguin Books", "Tiểu thuyết, Lãng mạn", "available"),
+            ("1", "Bố già", "Mario Puzo", "G. P. Putnam's Sons", "Tiểu thuyết, Tội phạm", "borrowed"),
+            ("5", "Chúa tể của những chiếc nhẫn", "J. R. R. Tolkien", "Houghton Mifflin Harcourt", "Tiểu thuyết, Giả tưởng", "available"),
+            ("6", "Harry Potter và Hòn đá Phù thủy", "J. K. Rowling", "Bloomsbury Publishing", "Tiểu thuyết, Giả tưởng", "available"),
+            ("4", "Hoàng tử bé", "Antoine de Saint-Exupéry", "Gallimard", "Tiểu thuyết, Giả tưởng", "available"),
+            ("10", "1984", "George Orwell", "Penguin Books", "Tiểu thuyết, Chính trị", "borrowed")
         ]
         for isbn, title, author, publisher, genre, status in default_books:
             self.insert(isbn, title, author, publisher, genre, status)
@@ -185,7 +185,7 @@ class BookApp:
         left_frame.pack(side='left', fill='y', expand=False)
 
         # Form entries
-        labels = ['ISBN:', 'Title:', 'Author:', 'Publisher:', 'Genre:', 'Status:']
+        labels = ['ID:', 'Title:', 'Author:', 'Publisher:', 'Genre:', 'Status:']
         entries = [tk.Entry(left_frame) for _ in labels]
         self.isbn_entry, self.title_entry, self.author_entry, self.publisher_entry, self.genre_entry, self.status_entry = entries
 
@@ -200,7 +200,7 @@ class BookApp:
         self.status_combo.current(0)
 
         # Buttons
-        buttons = ['Insert Book', 'Search by ISBN', 'Search by Title', 'Borrow Book', 'Return Book', 'Show All Books', 'Show Available Books', "Show Borrowed Books", 'Delete Book', 'Update Book', 'Exit']
+        buttons = ['ID', 'Search by ID', 'Search by Title', 'Borrow Book', 'Return Book', 'Show All Books', 'Show Available Books', "Show Borrowed Books", 'Delete Book', 'Update Book', 'Exit']
         commands = [self.insert_book, self.search_by_isbn,self.search_by_title, self.borrow_book, self.return_book, self.show_all_books, self.show_available_books, self.show_borrowed_books, self.delete_book, self.update_book, self.exit_app]
         for i, (button_text, command) in enumerate(zip(buttons, commands)):
             tk.Button(left_frame, text=button_text, command=command).grid(row=6+i, column=0, columnspan=2, sticky='ew', pady=5)   
@@ -216,10 +216,10 @@ class BookApp:
         tk.Label(right_frame, text=headings, font=('Arial', 20, 'bold')).pack(side='top', fill='x')
 
 
-        self.tree_view = ttk.Treeview(right_frame, columns=("ISBN", "Title", "Author", "Publisher", "Genre", "Status"), show="headings")
+        self.tree_view = ttk.Treeview(right_frame, columns=("ID", "Title", "Author", "Publisher", "Genre", "Status"), show="headings")
         self.tree_view.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        for col in ("ISBN", "Title", "Author", "Publisher", "Genre", "Status"):
+        for col in ("ID", "Title", "Author", "Publisher", "Genre", "Status"):
             self.tree_view.heading(col, text=col)
             self.tree_view.column(col, anchor=tk.W)
 
