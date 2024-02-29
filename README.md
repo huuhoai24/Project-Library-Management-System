@@ -1,7 +1,4 @@
 ## Hệ thống quản lý thư viện sử dụng cây tìm kiếm nhị phân 
-# Lưu ý còn cần bổ sung
-Thành phần
----------------------------------
 ### Node:
 - IBSN (book id)
 - Title
