@@ -70,7 +70,7 @@ class Book:
     def _search_by_title(self, title, current_node):
         if current_node is None:
             return None
-        if title.lower() == current_node.title.lower():
+        if title.lower() in current_node.title.lower():
             return current_node
         left_search = self._search_by_title(title, current_node.left)
         if left_search is not None:
