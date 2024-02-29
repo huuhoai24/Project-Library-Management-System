@@ -2,7 +2,7 @@
 # Lưu ý còn cần bổ sung
 Thành phần
 ---------------------------------
-### node:
+### Node:
 - IBSN (book id)
 - Title
 - Author
