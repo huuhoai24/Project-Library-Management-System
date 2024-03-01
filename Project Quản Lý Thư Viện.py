@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+import json
 
 # Define the Node and Book classes for your code
 class Node:
@@ -16,21 +17,45 @@ class Node:
 class Book:
     def __init__(self):
         self.root = None
-        self.add_default_books()
-    
+        self.load_from_file()
+
+    def load_from_file(self, filename="library_data.json"):
+        try:
+            with open(filename, 'r') as file:
+                book_list = json.load(file)
+            for book in book_list:
+                if not self.search_by_id(book['id']):  # Prevent duplication
+                    self.insert(book['id'], book['title'], book['author'], book['publisher'], book['genre'], book['status'])
+        except FileNotFoundError:
+            self.add_default_books()  # Only add default books if file not found
+
     def add_default_books(self):
         default_books = [
-            ("978-0-316-19699-8", "Sapiens: Lược sử loài người", "Yuval Noah Harari", "HarperCollins", "Khoa học phổ thông, Lịch sử", "Available"),
-            ("978-1-4391-7103-7", "Nhà giả kim", "Paulo Coelho", "HarperCollins", "Tiểu thuyết, Giả tưởng", "Available"),
-            ("978-0-393-30788-1", "Bố già", "Mario Puzo", "G. P. Putnam's Sons", "Tiểu thuyết, Tội phạm", "Available"),
-            ("978-0-7432-7318-5", "Chúa tể của những chiếc nhẫn", "J. R. R. Tolkien", "Houghton Mifflin Harcourt", "Tiểu thuyết, Giả tưởng", "Available"),
-            ("978-0-316-01584-6", "Harry Potter và Hòn đá Phù thủy", "J. K. Rowling", "Bloomsbury Publishing", "Tiểu thuyết, Giả tưởng", "Available"),
-            ("978-0-399-55992-4", "Hoàng tử bé", "Antoine de Saint-Exupéry", "Gallimard", "Tiểu thuyết, Giả tưởng", "Available"),
-            ("978-1-4000-7860-4", "1984", "George Orwell", "Penguin Books", "Tiểu thuyết, Chính trị", "Available")
+            ("978-0-316-19699-8", "Sapiens: A Brief History of Humankind", "Yuval Noah Harari", "HarperCollins", "Non-fiction, History", "Available"),
+            ("978-1-4391-7103-7", "The Alchemist", "Paulo Coelho", "HarperCollins", "Fiction, Fantasy", "Available"),
+            # Add more default books here
         ]
-
         for id, title, author, publisher, genre, status in default_books:
-            self.insert(id, title, author, publisher, genre, status)
+            if not self.search_by_id(id):  # Check if the book already exists
+                self.insert(id, title, author, publisher, genre, status)
+
+    def save_to_file(self, filename="library_data.json"):
+        book_list = []
+        def add_to_list(node):
+            if node:
+                book_list.append({
+                    'id': node.id,
+                    'title': node.title,
+                    'author': node.author,
+                    'publisher': node.publisher,
+                    'genre': node.genre,
+                    'status': node.status
+                })
+        self._inorder_traversal(self.root, add_to_list)
+        with open(filename, 'w') as file:
+            json.dump(book_list, file, indent=4)
+
+
 
     def insert(self, id, title, author, publisher, genre, status):
         new_node = Node(id, title, author, publisher, genre, status)
@@ -38,6 +63,7 @@ class Book:
             self.root = new_node
         else:
             self._insert(new_node, self.root)
+        self.save_to_file()
 
     def _insert(self, new_node, current_node):
         if new_node.id < current_node.id:
@@ -117,6 +143,8 @@ class Book:
 
     def delete_book(self, id):
         self.root, deleted = self._delete_book(self.root, id)
+        if deleted:
+            self.save_to_file()  # Save changes after deleting
         return "Book deleted successfully" if deleted else "Book does not exist"
 
     def _delete_book(self, current_node, id):
@@ -152,6 +180,7 @@ class Book:
             node.publisher = new_publisher
             node.genre = new_genre
             node.status = new_status
+            self.save_to_file()
             return "Book updated successfully"
         return "Book does not exist"
 
@@ -331,4 +360,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = BookApp(root)
     root.mainloop()
-
