@@ -1,41 +1,31 @@
-## Hệ thống quản lý thư viện sử dụng cây tìm kiếm nhị phân 
-### Node:
-- IBSN (book id)
-- Title
-- Author
-- Pusblisher
-- Genre 
-- Status (available / borrowed)
-### Functions:
-- Insert Book
-- Search by key and title
-- Borrow / Return book
-- Show book:
-    - Show all books
-    - Show available book
-- Delete book
+The problem of Library Management System built using Python and its tkinter graphical user interface (GUI) toolkit. The system manages books in a library, allowing users to perform various operations such as inserting new books, searching for books, borrowing and returning books, and deleting or updating book records. The data structure used to manage books is a binary search tree (BST), which organizes books based on their IDs for efficient retrieval and management.
 
-  
+### Classes and Data Structures:
+
+1. **Node Class**: Represents a node in the binary search tree. Each node contains the data for one book (including its ID, title, author, publisher, genre, and status), as well as references to the left and right child nodes in the tree.
+
+2. **Book Class**: Manages the binary search tree of books. It includes methods for inserting, searching, borrowing, returning, and deleting books, as well as for loading and saving the book collection to a file (using JSON format). It also includes methods to traverse the tree and perform actions such as displaying all books or filtering them based on their availability.
 
 
+### Functionalities:
 
-### Cấu trúc dữ liệu:
-1. **Binary Search Tree (BST):** Lớp `Node` và các phương thức trong lớp `Book` như `insert`, `_insert`, `search_by_isbn`, `_search_by_isbn`, `delete_book`, và `_delete_book` đều chỉ ra việc sử dụng cây tìm kiếm nhị phân để lưu trữ và quản lý các sách. Trong BST này, mỗi nút chứa thông tin về một cuốn sách bao gồm ISBN, tiêu đề, tác giả, nhà xuất bản, thể loại, và trạng thái. ISBN được sử dụng làm khóa để sắp xếp các nút trong cây.
+- **Inserting Books**: Users can add new books to the library by entering details and clicking the "Insert Book" button. The system checks for duplicate IDs to prevent adding the same book twice.
 
-2. **List:** `default_books` là một danh sách các bộ gồm thông tin sách được sử dụng để khởi tạo cây với các sách mặc định.
+- **Searching for Books**: Users can search for books by ID or title using the respective search functions.
 
-3. **Variables and Objects:** Các biến như `isbn`, `title`, `author`, `publisher`, `genre`, `status` được sử dụng để lưu trữ thông tin tạm thời và truyền dữ liệu giữa các phương thức và lớp.
+- **Borrowing and Returning Books**: Users can change the status of a book to "Borrowed" when borrowing and back to "Available" when returning.
 
-### Thuật toán:
-1. **Insertion in BST:** Phương thức `insert` và `_insert` mô tả cách thêm một nút mới vào cây tìm kiếm nhị phân dựa trên ISBN.
+- **Updating and Deleting Books**: Books can be updated with new information or removed from the library entirely.
 
-2. **Search in BST:** Phương thức `search_by_isbn` và `_search_by_isbn` cùng với `search_by_title` và `_search_by_title` biểu diễn thuật toán tìm kiếm trong BST, tìm kiếm dựa trên ISBN hoặc tiêu đề.
+- **Displaying Books**: The system can display lists of all books, only available books, or only borrowed books, based on the user's selection.
 
-3. **In-order Traversal:** Phương thức `_inorder_traversal` được sử dụng để duyệt cây theo thứ tự inorder. Điều này giúp liệt kê các sách trong thứ tự ISBN tăng dần và cũng được sử dụng để hiển thị sách theo trạng thái cụ thể (có sẵn hoặc đã mượn).
+- **Data Persistence**: The system saves the library's state to a JSON file, ensuring that data is not lost between sessions.
 
-4. **Delete in BST:** Phương thức `delete_book` và `_delete_book` mô tả thuật toán xóa một nút khỏi BST, điều chỉnh cây để giữ cấu trúc sau khi xóa.
+### GUI Components:
 
-5. **Update Information:** Phương thức `update_book` cho phép cập nhật thông tin của một cuốn sách nếu nó tồn tại trong cây.
+The application uses tkinter to create a user-friendly interface that includes:
 
-### Ứng dụng GUI:
-Ứng dụng cũng sử dụng thư viện Tkinter để tạo giao diện người dùng đồ họa (GUI), cho phép tương tác với hệ thống quản lý thư viện bằng cách sử dụng các biểu mẫu và nút nhấn thay vì thông qua dòng lệnh. Các cấu trúc dữ liệu như danh sách và chuỗi được sử dụng để quản lý các yếu tố giao diện như entries, labels, và buttons.
+- Text entry fields for inputting book information (ID, title, author, publisher, genre, and status).
+- Buttons for performing actions like inserting a new book, searching, borrowing, returning, and showing different lists of books (all, available, borrowed).
+- A treeview widget to display the list of books, allowing the user to see the details of all books in the library or a filtered list.
+- A combobox for selecting the status of a book when inserting or updating it.
